@@ -35,6 +35,14 @@ func Create(course Course) (Course, error) {
 	return course, err
 }
 
+func Delete(id uint64) error {
+	_, err := infrastructure.DB.Exec(`
+	DELETE FROM course
+	WHERE id=$1;
+	`, id)
+	return err
+}
+
 func All() ([]Course, error) {
 	rows, err := infrastructure.DB.Query(`
 	SELECT id,name,credit,college_id

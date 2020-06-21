@@ -40,12 +40,25 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(response)
 }
 
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	courseId := r.URL.Query().Get("id")
+	id, _ := strconv.ParseUint(courseId, 10, 64)
+	err := model.Delete(id)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+}
+
 func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		getHandler(w, r)
 	case "POST":
 		postHandler(w, r)
+	case "DELETE":
+		deleteHandler(w, r)
 	}
 }
 
